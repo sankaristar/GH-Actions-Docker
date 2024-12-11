@@ -44,4 +44,4 @@ jobs:
         run: docker build . --file Dockerfile --tag ziermann/tut:${{steps.version.outputs.tag}}
         
       - name: Push to Docker Hub
-        run: docker push ziermann/tut:${{steps.version.outputs.tag}}
+        run: docker push okanshuman/test:${{steps.version.outputs.tag}}
