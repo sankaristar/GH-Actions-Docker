@@ -45,3 +45,27 @@ jobs:
         
       - name: Push to Docker Hub
         run: docker push sankaristar/reactapp:${{steps.version.outputs.tag}}
+      - name: Deploy to AWS EC2
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            #!/bin/bash
+            IMAGE_NAME="sankaristar/reactapp:${{steps.version.outputs.tag}}"
+            CONTAINER_NAME="reactapp"
+            PORT_MAPPING="8081:80"
+
+            docker pull $IMAGE_NAME
+
+            # Stop the existing container if running
+            docker stop $CONTAINER_NAME || true
+
+            # Remove the old container
+            docker rm $CONTAINER_NAME || true
+
+            # Run a new container with the latest image
+            docker run --name $CONTAINER_NAME -d -p $PORT_MAPPING $IMAGE_NAME
+
+            echo "Deployment complete!"       
