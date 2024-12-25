@@ -57,15 +57,15 @@ jobs:
             CONTAINER_NAME="reactapp"
             PORT_MAPPING="8081:80"
 
-            docker pull $IMAGE_NAME
+            sudo docker pull $IMAGE_NAME
 
             # Stop the existing container if running
-            docker stop $CONTAINER_NAME || true
+            sudo docker stop $CONTAINER_NAME || true
 
             # Remove the old container
-            docker rm $CONTAINER_NAME || true
+            sudo docker rm $CONTAINER_NAME || true
 
             # Run a new container with the latest image
-            docker run --name $CONTAINER_NAME -d -p $PORT_MAPPING $IMAGE_NAME
+            sudo docker run --name $CONTAINER_NAME -d -p $PORT_MAPPING $IMAGE_NAME
 
             echo "Deployment complete!"       
